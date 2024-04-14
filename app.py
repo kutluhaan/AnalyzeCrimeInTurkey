@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import plotly.graph_objects as go
 import pandas as pd
-import io
-import base64
 
 app = Flask(__name__)
 
