@@ -1,0 +1,236 @@
+{% include "empty.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis</title><!-- Set a title image -->
+    <link rel="icon" type="image/png" href="data.jpg"> 
+    <!-- Navigation Bar Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+</head>
+<body>
+    <div class="navbar">
+        <a href="/"><i class="fa fa-fw fa-home"></i> Home</a>
+        <a class="active" href="/data_analysis"><i class="fa fa-fw fa-search"></i> Analysis</a> 
+        <a  href="/about"><i class="fa fa-fw fa-envelope"></i> About Us</a> 
+        <a href="/contact"><i class="fa fa-fw fa-phone"></i>Contact</a>
+    </div>
+    
+    <div class="investigate-col">
+        <br><br><br>
+        <form method="POST">
+            <div class="topic">
+                <label for="topic">Topic</label>
+                <select id="topic" name="topic" class="w-100 selectpicker">
+                    <option>Education</option>
+                    <option>Judgement</option>
+                    <option>Kids</option>
+                    <option>Poorness Based on Education</option>
+                    <option>Race</option>
+                </select>
+            </div>
+            <br>
+            <div class="sub-topic">
+                <label for="sub-topic">Subtopic</label>
+                <select id="sub-topic" name="sub-topic" class="w-100 selectpicker">
+                    
+                </select>
+            </div>
+            <br>
+            <div class="year">
+                <label for="year">Year</label>
+                <select id="year" name="year" class="w-100 selectpicker">
+                    
+                </select>
+            </div>
+            <br>
+            <div class="visualize">
+                <label for="visualize">Visualize</label>                    
+                <input type="checkbox" id="visualize" name="visualize" value="visualize">
+            </div>
+            <div class="describe">
+                <label for="describe">Describe</label>                    
+                <input type="checkbox" id="describe" name="describe" value="describe">
+            </div>
+            
+            <br>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="show-col">
+        <div class="table-container">
+            <h2 class="table-title">{{ header }}</h2> <!-- Add a title for the table -->
+            {{ data | safe }}
+            <br>
+            <br>
+            <br>
+            {{ data_description | safe}}
+            <br>
+            <br>
+            <br>
+            <div id="plot">{{ plot_div | safe }}</div> 
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+
+    <style>
+        /* Custom styling for select dropdowns */
+        select {
+            padding: 10px; /* Add padding */
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 5px; /* Add border radius */
+            width: 100%; /* Set width to 100% */
+            max-width: 300px; /* Set maximum width */
+        }
+        .table-title {
+            text-align: center; /* Center the table title horizontally */
+            margin-top: 10px; /* Add space between the title and the table */
+            font-size: 16px; /* Adjust the font size as needed */
+            font-weight: normal; /* Use normal font weight for the title */
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .investigate-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* For centering text within the div */
+            color:white;
+            position: fixed;
+            width: 20%;
+            height: 100vh; /* 100% of viewport height */
+            background-color: rgba(255, 255, 255, 0.3); /* White with 80% transparency */
+            border: 2px solid #f0f0f0; /* Light white border */
+            border-radius: 20px; /* Rounded corners */
+            z-index: 0; /* Place behind other elements */
+        }
+        .show-col{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* For centering text within the div */
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 80%;
+            height: 100vh; /* 100% of viewport height */
+            background-color: rgba(255, 255, 255, 0);
+            overflow-x: auto; /* Enable horizontal scrolling */
+            bottom: 25px; /* Align with the bottom of the viewport */
+            padding-bottom: 250px; /* Add some space at the bottom */
+        }
+        tr:hover {
+            background-color: #F3AA60;
+            color: black;
+        }
+        table{
+            padding: 15px;
+            background-color: white;
+        }
+        table td, th{
+            font-size: 15px; /* Adjust the value as needed */
+        }
+        .table-container {
+            max-height: calc(100vh - 80px); /* Adjust based on navbar height */
+            overflow: auto; /* Enable vertical scrolling if necessary */
+            padding: 10px; /* Add some padding for better visualization */
+        }
+        tr {
+            border-bottom: 1px solid #ddd;
+          }
+    </style>
+    <script>
+        var topicSelect = document.getElementById("topic");
+        var subTopicSelect = document.getElementById("sub-topic");
+        var yearSelect = document.getElementById("year");
+    
+        // Define the years for each topic
+        var yearOptions = {
+            "Education": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+            "Judgement": ["2011-2020"],
+            "Kids": ["2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+            "Poorness Based on Education": ["2006-2022"],
+            "Race": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
+        };
+
+        // Define the years for each topic
+        var subTopicOptions = {
+            "Education": ["Number of convicted people Based on Education", "Number of people who left the prison based on education"],
+            "Judgement": ["Number of convicted people and detainess"],
+            "Kids": ["Number of child incidents based on accusation of crime and gender", 
+                     "Number of child incidents based on reason of arrival to police office and gender",
+                     "Number of child incidents based on reason of arrival to police office, gender and age group",
+                     "Number of child incidents based on gender and type of victimization"],
+            "Poorness Based on Education": ["Numbers of poorness at Türkiye education based",
+                                            "Poverty rate at Türkiye education based"],
+            "Race": ["Guilties based on victimization type and race", "Guilties left the prison based on race"]
+        };
+    
+        function updateYearOptions() {
+            var selectedTopic = topicSelect.value;
+            var years = yearOptions[selectedTopic];
+        
+            console.log("Selected topic:", selectedTopic);
+            console.log("Years for selected topic:", years);
+        
+            // Clear existing options from the original select element
+            yearSelect.innerHTML = "";
+        
+            // Add options for the selected topic to the original select element
+            years.forEach(function(year) {
+                var option = new Option(year, year);
+                yearSelect.add(option);
+            });
+        }
+
+        function updateSubTopicOptions() {
+            var selectedTopic = topicSelect.value;
+            var subTopics = subTopicOptions[selectedTopic];
+            
+            console.log("Selected topic:", selectedTopic);
+            console.log("Subtopics for selected topic:", subTopics);
+            
+            // Clear existing options from the original select element
+            subTopicSelect.innerHTML = "";
+            
+            // Add options for the selected topic to the original select element
+            subTopics.forEach(function(subTopic) {
+                var option = new Option(subTopic, subTopic);
+                subTopicSelect.add(option);
+            });
+        }
+        
+        // Call the function initially to populate subtopic options based on default topic
+        updateSubTopicOptions();
+        
+        // Event listener for changes in the topic select
+        topicSelect.addEventListener("change", updateSubTopicOptions);
+        
+        updateYearOptions()
+        // Event listener for changes in the topic select
+        topicSelect.addEventListener("change", updateYearOptions);
+    </script>   
+    
+</body>
+</html>
