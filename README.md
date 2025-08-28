@@ -9,7 +9,7 @@ Education Connection: Ever wonder if there's a link between education and crime?
 
 Crime Through the Years: You can see how crime trends have changed over time and spot any patterns.
 
-Age Matters: Find out how crime rates vary across different age groups.
+Age Matters:  Find out how crime rates vary across different age groups.
 
 Easy to Use: It's a simple, web-based app so you can just open it up and start exploring the data right away.
 
