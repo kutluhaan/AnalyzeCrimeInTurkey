@@ -24,26 +24,6 @@ Matplotlib & Seaborn: These libraries make our charts look good and easy to unde
 
 HTML, CSS & JavaScript: The classic trio for making the app look and feel great!
 
-📦 The Folder Breakdown
-├── kutluhaan-analyzecrimeinturkey/
-│   ├── README.md                      # You're reading this!
-│   ├── app.py                         # The heart of our Flask app
-│   ├── requirements.txt               # A list of everything you need to install
-│   ├── db/
-│   │   ├── education/                 # All the education and crime data files
-│   │   ├── age/                       # The age and crime data files
-│   │   └── prison_population/         # Data about the prison population
-│   ├── templates/                     # Where all the HTML files live
-│   │   ├── includes/
-│   │   │   ├── formhelpers.html
-│   │   │   └── messages.html
-│   │   ├── about.html
-│   │   ├── contact.html
-│   │   ├── base.html
-│   │   └── home.html
-│   ├── static/                        # All the styling, scripts, and images
-│   └── (and a few other files...)
-
 🛠️ How to Get Started
 Want to run this yourself? No problem! Just follow these easy steps.
 
