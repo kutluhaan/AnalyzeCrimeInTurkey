@@ -1,5 +1,5 @@
 🇹🇷 Analyze Crime in Turkey
-📝 What's This All About?
+📝 What is This All About?
 Hey there! This project is a super cool web app made with Python and Flask. It's all about checking out crime data in Turkey! We're using official stats from the Turkish Statistical Institute (TÜİK) to see how crime relates to things like how much education people have or how old they are. It's an interactive tool to help you visualize the data and get some interesting insights.
 
 🚀 What Can It Do?
